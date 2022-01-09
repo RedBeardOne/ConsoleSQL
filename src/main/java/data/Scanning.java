@@ -1,7 +1,5 @@
 package data;
 
-import java.sql.Array;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Locale;
@@ -60,17 +58,34 @@ public class Scanning {
         return flag;
     }
 
+    private void updating(Scanner scanner, DB_commands commands) {
+        System.out.println("Input name of table to update & data in order:");
+        System.out.println("Name of table, ID, name, mail, age");
+        scanner.hasNext();
+        String data1 = scanner.next();
+        String[] dataParsed = data1.split(",");
+        String str = String.format("INSERT INTO %s VALUES(%s, '%s' , '%s', %s)",
+                dataParsed[0].trim(),
+                dataParsed[1].trim(),
+                dataParsed[2].trim(),
+                dataParsed[3].trim(),
+                dataParsed[4].trim());
+        System.out.println(str);
+        try {
+            commands.updateDB(str);
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+    }
+
     private void deleting(Scanner scanner, DB_commands commands) {
         System.out.println("Input name of table to delete");
-        String data4 = scanner.next().trim().toLowerCase(Locale.ROOT);
-        System.out.println("The delete operation is irreversible, enter \"Y\" if you want to delete the table");
-        String confirmation = scanner.next();
-        if (confirmation.equals("Y")) {
-            try {
-                commands.deleteDB(data4);
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
+        String data4 = scanner.next().trim();
+        System.out.println(data4);
+        try {
+            commands.deleteDB(data4);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
     }
 
@@ -93,18 +108,6 @@ public class Scanning {
             commands.sortDB(data2);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
-        }
-    }
-
-    private void updating(Scanner scanner, DB_commands commands) {
-        System.out.println("Input name of table to update & data in order:");
-        System.out.println("Name of table, ID, name, mail, age");
-        String data1 = scanner.next().trim().toLowerCase(Locale.ROOT);
-        String[] dataParsed = data1.split(",");
-        try {
-            commands.updateDB(dataParsed[0], Integer.getInteger(dataParsed[1]), dataParsed[2], dataParsed[3], Integer.getInteger(dataParsed[4]));
-        } catch (SQLException exception) {
-            exception.printStackTrace();
         }
     }
 

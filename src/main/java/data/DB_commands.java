@@ -10,38 +10,30 @@ public class DB_commands {
         statement = connection.createStatement();
 
         String str = String.format("CREATE TABLE %s (ID INTEGER, name VARCHAR(100), mail VARCHAR(100), age INTEGER)", table);
+        System.out.println(str);
         statement.executeUpdate(str);
-
     }
 
-    public void updateDB(String table, int ID, String name, String mail, int age) throws SQLException {
-        if (statement != null) {
-            String str = String.format("INSERT INTO TABLE %s (%d INTEGER, %s VARCHAR(100), %s VARCHAR(100), %d INTEGER )",
-                    table, ID, name, mail, age);
-            statement.executeUpdate(str);
-        } else {
-            System.out.println("Need to create table first");
-        }
+    public void updateDB(String command) throws SQLException {
+        statement.executeUpdate(command);
     }
 
     public void sortDB(String table) throws SQLException {
-        if (statement != null) {
-            ResultSet cursor = statement.executeQuery(String.format("SELECT * FROM %s ORDER BY ACS", table));
-            while (cursor.next()) {
-                System.out.print(" ID = " + cursor.getInt("ID"));
-                System.out.print(" name = " + cursor.getString("name"));
-                System.out.print(" mail = " + cursor.getString("mail"));
-                System.out.print(" age = " + cursor.getInt("age") + "\n");
-            }
-        } else {
-            System.out.println("Need to create table first");
+        String command = String.format("SELECT * FROM %s ORDER BY id asc", table);
+        System.out.println(command);
+        ResultSet cursor =  statement.executeQuery(command);
+        while (cursor.next()) {
+            System.out.print(" ID = " + cursor.getInt("ID"));
+            System.out.print(" name = " + cursor.getString("name"));
+            System.out.print(" mail = " + cursor.getString("mail"));
+            System.out.print(" age = " + cursor.getInt("age") + "\n");
         }
     }
 
 
     public void selectFromDB(String table, String word) throws SQLException {
-        if (statement != null) {
-            String inquiry = String.format("SELECT * FROM " + table + " WHERE name LIKE '%" + word + "%' OR mail LIKE '%" + word + "%' ");
+            String inquiry = "SELECT * FROM " + table + " WHERE name LIKE '%" + word + "%' OR mail LIKE '%" + word + "%' ";
+            System.out.println(inquiry);
             ResultSet cursor = statement.executeQuery(inquiry);
             while (cursor.next()) {
                 System.out.print(" ID = " + cursor.getInt("ID"));
@@ -49,18 +41,14 @@ public class DB_commands {
                 System.out.print(" mail = " + cursor.getString("mail"));
                 System.out.print(" age = " + cursor.getInt("age") + "\n");
             }
-        } else {
-            System.out.println("Need to create table first");
-        }
     }
 
     public void deleteDB(String table) throws SQLException {
-        if (statement != null) {
-            String inquiry = String.format("DROP TABLE %s", table);
-            statement.executeUpdate(inquiry);
-        } else {
-            System.out.println("Need to create table first");
-        }
+        String inquiry = String.format("DROP TABLE %s", table);
+        System.out.println(inquiry);
+        statement.executeUpdate(inquiry);
+        System.out.println("Need to create table first");
+
     }
 }
 
