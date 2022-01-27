@@ -1,19 +1,21 @@
 package data.dao;
 
 import data.repository.Author;
+import data.repository.User;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 
-public class AuthorDAO {
+public class AuthorDAO implements ILibraryRepository<Author> {
     private final Connection connection;
 
     public AuthorDAO(Connection connection) {
         this.connection = connection;
     }
 
+    @Override
     public void createTable() throws SQLException {
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(
@@ -21,6 +23,7 @@ public class AuthorDAO {
         }
     }
 
+    @Override
     public void insert(Author author) throws SQLException {
         if (author.getID() != 0) {
             throw new IllegalArgumentException("ID is: " + author.getID());
@@ -44,6 +47,7 @@ public class AuthorDAO {
         }
     }
 
+    @Override
     public void update(Author author) throws SQLException {
         if (author.getID() == 0) {
             throw new IllegalArgumentException("ID is not set");
@@ -59,6 +63,7 @@ public class AuthorDAO {
         }
     }
 
+    @Override
     public Collection<Author> getAll() throws SQLException {
         Collection<Author> collect = new ArrayList<>();
         try (Statement statement = connection.createStatement()) {
@@ -70,6 +75,7 @@ public class AuthorDAO {
         return collect;
     }
 
+    @Override
     public Optional<Author> getById(int id) throws SQLException {
         String sql = "SELECT * FROM author WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -82,21 +88,26 @@ public class AuthorDAO {
         return Optional.empty();
     }
 
-    public Collection<Author> getByName(String text) throws SQLException {
-        String sql = "SELECT * FROM author WHERE name = '%%%?%%'";
-        Collection<Author> collect = new ArrayList<>();
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, text);
-            {
-                ResultSet cursor = statement.executeQuery();
-                while (cursor.next()) {
-                    collect.add(createAuthor(cursor));
-                }
-            }
-            return collect;
-        }
+    @Override
+    public Collection<Author> getAllItemsByIdOwner(int id) throws SQLException {
+        throw new SQLException("Method not  implemented yet, here is nothing to return , it do not have owners");
     }
 
+    @Override
+    public Collection<Author> getItemsByName(String word) throws SQLException {
+        Collection<Author> collect = new ArrayList<>();
+        String sql = "SELECT * FROM author WHERE name LIKE ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, "%" + word + "%");
+            ResultSet cursor = statement.executeQuery();
+            while (cursor.next()) {
+                collect.add(createAuthor(cursor));
+            }
+        }
+        return collect;
+    }
+
+    @Override
     public void deleteDB() throws SQLException {
         String inquiry = "DROP TABLE author";
         Statement statement = connection.createStatement();
