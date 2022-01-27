@@ -30,7 +30,6 @@ public class DB_commands {
         }
     }
 
-
     public void selectFromDB(String table, String word) throws SQLException {
             String inquiry = "SELECT * FROM " + table + " WHERE name LIKE '%" + word + "%' OR mail LIKE '%" + word + "%' ";
             System.out.println(inquiry);
