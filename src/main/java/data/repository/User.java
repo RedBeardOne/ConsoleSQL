@@ -1,6 +1,6 @@
 package data.repository;
 
-public class User {
+public class User implements Entity{
     private int userId;
     private String name;
 
@@ -33,5 +33,10 @@ public class User {
     @Override
     public String toString() {
         return "User " + "name '" + name + '\'' + ", userId = " + userId;
+    }
+
+    @Override
+   public String getReadable() {
+        return toString();
     }
 }

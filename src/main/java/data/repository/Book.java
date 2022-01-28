@@ -1,6 +1,6 @@
 package data.repository;
 
-public class Book {
+public class Book implements Entity{
     private int id;
     private String title;
     private int authorId;
@@ -35,5 +35,10 @@ public class Book {
     @Override
     public String toString() {
         return "Book: " + "id = " + id + ", title '" + title + '\'' + ", author_Id = " + authorId;
+    }
+
+    @Override
+    public String getReadable() {
+        return toString();
     }
 }

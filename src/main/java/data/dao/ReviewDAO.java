@@ -1,6 +1,5 @@
 package data.dao;
 
-import data.repository.Book;
 import data.repository.Review;
 
 import java.sql.*;
@@ -73,13 +72,21 @@ public class ReviewDAO implements ILibraryRepository<Review> {
             statement.setString(1, review.getText());
             statement.setInt(2, review.getUserId());
             statement.setInt(3, review.getBookId());
+            statement.setInt(4, review.getId());
             statement.executeUpdate();
         }
     }
 
     @Override
     public Collection<Review> getAll() throws SQLException {
-        return null;
+        Collection<Review> collect = new ArrayList<>();
+        try (Statement statement = connection.createStatement()) {
+            ResultSet cursor = statement.executeQuery("SELECT * FROM review");
+            while (cursor.next()) {
+                collect.add(createReview(cursor));
+            }
+        }
+        return collect;
     }
 
     @Override

@@ -1,6 +1,5 @@
 package data.dao;
 
-import data.repository.Book;
 import data.repository.User;
 
 import java.sql.*;

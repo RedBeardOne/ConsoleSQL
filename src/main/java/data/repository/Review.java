@@ -1,6 +1,6 @@
 package data.repository;
 
-public class Review {
+public class Review implements Entity{
 
     private int Id;
     private String text;
@@ -47,5 +47,10 @@ public class Review {
         return "Review: \n" + text + '\n' +
                 " userId = " + userId +
                 ", bookId = " + bookId;
+    }
+
+    @Override
+  public String getReadable() {
+        return toString();
     }
 }

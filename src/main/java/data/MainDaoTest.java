@@ -1,9 +1,6 @@
 package data;
 
-import data.dao.AuthorDAO;
-import data.dao.BookDAO;
-import data.dao.ReviewDAO;
-import data.dao.UserDAO;
+import data.dao.*;
 import data.repository.Author;
 import data.repository.Book;
 import data.repository.Review;
@@ -33,12 +30,12 @@ public class MainDaoTest {
         AuthorDAO authorDAO = new AuthorDAO(connection);
         BookDAO bookDAO = new BookDAO(connection);
         UserDAO userDAO = new UserDAO(connection);
-        ReviewDAO reviwDAO = new ReviewDAO(connection);
+        ReviewDAO reviewDAO = new ReviewDAO(connection);
 
         authorDAO.createTable();
         bookDAO.createTable();
         userDAO.createTable();
-        reviwDAO.createTable();
+        reviewDAO.createTable();
 
         Author great = new Author("Name Great", 1930);
         Author a_kid = new Author("Kid Author", 1991);
@@ -85,28 +82,62 @@ public class MainDaoTest {
         Review review6 = new Review("Impressive", 6, 6);
         Review review7 = new Review("Need to buy", 1, 1);
         Review review8 = new Review("repetable", 2, 1);
-        reviwDAO.insert(review1);
-        reviwDAO.insert(review2);
-        reviwDAO.insert(review3);
-        reviwDAO.insert(review4);
-        reviwDAO.insert(review5);
-        reviwDAO.insert(review6);
-        reviwDAO.insert(review7);
-        reviwDAO.insert(review8);
-
-        Collection<Review> o = reviwDAO.getItemsByName("Ol");
-        for (Review review : o) {
-            System.out.println("result of " + review);
+        reviewDAO.insert(review1);
+        reviewDAO.insert(review2);
+        reviewDAO.insert(review3);
+        reviewDAO.insert(review4);
+        reviewDAO.insert(review5);
+        reviewDAO.insert(review6);
+        reviewDAO.insert(review7);
+        reviewDAO.insert(review8);
+        System.out.println("TEST Of Author dao");
+        System.out.println(authorDAO.getById(2).get());
+        Collection<Author> authorD = authorDAO.getAll();
+        for (Author author : authorD) {
+            System.out.println(author);
         }
+        System.out.println(authorDAO.getItemsByName("F"));
+        System.out.println(authorDAO.getById(2).get());
+        authorDAO.update(new Author(2, "Changes Second ID", 1000));
+        System.out.println(authorDAO.getById(2).get());
 
-        Book update = new Book(1, "Zamena", lastOne.getID());
-        bookDAO.update(update);
+        System.out.println("TEST Of Book dao");
+        Collection<Book> allBook = bookDAO.getAll();
+        for (Book book : allBook) {
+            System.out.println(book);
+        }
+        System.out.println(bookDAO.getById(3));
+        bookDAO.update(new Book(3, "50 shadow of  grey", 2));
+        System.out.println(bookDAO.getById(3));
+        System.out.println(bookDAO.getItemsByName("grey"));
 
-//        authorDAO.deleteDB();
-//        bookDAO.deleteDB();
-//        userDAO.deleteDB();
-//        reviwDAO.deleteDB();
+        System.out.println("Test of User dao");
+        Collection<User> allUser = userDAO.getAll();
+        for (User user : allUser) {
+            System.out.println(user);
+        }
+        System.out.println(userDAO.getById(6));
+        userDAO.update(new User(6, "Fantomas"));
+        System.out.println(userDAO.getById(6));
+        System.out.println(userDAO.getItemsByName("Ty"));
 
+        System.out.println("test of Review dao");
+        Collection<Review> allReview = reviewDAO.getAll();
+        for (Review review : allReview) {
+            System.out.println(review);
+        }
+        System.out.println(reviewDAO.getById(3));
+        reviewDAO.update(new Review(2, "changed commite", 3, 4));
+        System.out.println(reviewDAO.getById(3));
+        System.out.println(reviewDAO.getItemsByName("com"));
+        ILibraryRepository iLib= authorDAO;
+        iLib.deleteDB();
+        iLib = bookDAO;
+        iLib.deleteDB();
+        iLib = userDAO;
+        iLib.deleteDB();
+        iLib =reviewDAO;
+        iLib.deleteDB();
     }
 
 }
